@@ -1,0 +1,52 @@
+close all
+dt = 2.4414e-04; % [S]
+n = 16384;
+T = (n-1)*dt; % [s] Per?odo da janela de tempo
+% nptf = 4097;
+% f_Ny = delta_f*(nptf-1);
+% f_hz = 0:delta_f:f_Ny;
+% omega = 2*pi*f_hz;
+%F_s = 2*f_Ny; % Sampling frequency
+t = 0:dt:T;
+
+load strain_S1_X
+strainS1X = Signal.y_values.values;
+load strain_S2_X
+strainS2X = Signal.y_values.values;
+
+figure
+fo = rand(2, length(t));
+
+figure
+subplot(2,1,1)
+plot(t,strainS1X,'k') 
+xlabel('Time [s]')
+ylabel('Strain 1')
+hold on
+subplot(2,1,2)
+plot(t,strainS2X,'r')
+hold off
+%axis([0 2 -0.1 0.1])
+
+Q = diag([0.1, 0.1, 0.1, 0.1])*10^-12;
+R = diag([223, 6])*10^-20;
+P = eye(4)*0.1;
+
+u = [0, 0]';
+x = [0, 0, 0, 0]';
+fc = 1000;
+fs = 4096;
+Wn = fc/(fs/2);
+
+figure
+subplot(2,1,1)
+plot(t(100:end),strainS1X(100:end),'k') 
+xlabel('Time [s]')
+hold on
+ylabel('Strain 1')
+hold off
+
+subplot(2,1,2)
+plot(t(100:end),strainS2X(100:end),'k') 
+hold on
+hold off
